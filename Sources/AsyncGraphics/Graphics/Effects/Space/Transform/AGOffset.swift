@@ -2,6 +2,7 @@ import CoreGraphics
 
 extension AGGraph {
     
+    @MainActor
     public func offset(x: CGFloat = 0.0, y: CGFloat = 0.0) -> any AGGraph {
         AGOffset(child: self, offset: CGPoint(x: x * .pixelsPerPoint,
                                               y: y * .pixelsPerPoint))
@@ -14,6 +15,7 @@ public struct AGOffset: AGSingleParentGraph {
     
     let offset: CGPoint
     
+    @MainActor
     public func render(at proposedResolution: CGSize,
                        details: AGDetails) async throws -> Graphic {
         let resolution: CGSize = resolution(at: proposedResolution, for: details.specification)

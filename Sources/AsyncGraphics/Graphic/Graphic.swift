@@ -5,7 +5,7 @@
 import Foundation
 import SwiftUI
 import CoreGraphics
-import Metal
+@preconcurrency import Metal
 import TextureMap
 import PixelColor
 import CoreGraphicsExtensions
@@ -30,7 +30,7 @@ public struct Graphic: Graphicable, Identifiable {
     /// Only available with `#if DEBUG`.
     /// Default is `false`.
     /// Setting this to `true` will create an extra image for each ``Graphic`` for debug previewing.
-    public static var quickLookDebugActive: Bool = false
+    nonisolated(unsafe) public static var quickLookDebugActive: Bool = false
     /// Quick Look Debug Image
     ///
     /// Preview for debugging.
@@ -99,6 +99,15 @@ extension Graphic {
         }
     }
     
+    /// Sendable wrapped UIImage / NSImage.
+    ///
+    /// Get the image by calling `.receive()`
+    public var sendableImage: SendableImage {
+        get async throws {
+            try await image.send()
+        }
+    }
+    
     /// UIImage / NSImage
     ///
     /// Raw image is just using an alternative way of converting the graphic to an image. It is a bit faster.
@@ -153,9 +162,18 @@ extension Graphic {
         }
     }
     
+    /// Sendable wrapped UIImage / NSImage with trasparency.
+    ///
+    /// Get the image by calling `.receive()`
+    public var sendableImageWithTransparency: SendableImage {
+        get async throws {
+            try await imageWithTransparency.send()
+        }
+    }
+    
     public func writeImage(to url: URL, xdr: Bool = false) async throws {
         let image: TMImage = try await image
-        try await TextureMap.write(image: image, to: url, bits: bits, colorSpace: xdr ? .xdr : colorSpace)
+        try TextureMap.write(image: image, to: url, bits: bits, colorSpace: xdr ? .xdr : colorSpace)
     }
     
     /// XDR UIImage / NSImage
@@ -163,6 +181,16 @@ extension Graphic {
     public var xdrImage: TMImage {
         get async throws {
             try await assignColorSpace(.xdr).image
+        }
+    }
+    
+    /// Sendable wrapped XDR UIImage / NSImage.
+    /// (Use with 16 or 32 bit graphics)
+    /// 
+    /// Get the image by calling `.receive()`
+    public var sendableXDRImage: SendableImage {
+        get async throws {
+            try await xdrImage.send()
         }
     }
 }
@@ -217,7 +245,7 @@ extension Graphic {
             return PixelColor(red: channels[0],
                               green: channels[1],
                               blue: channels[2],
-                              alpha: channels[3])
+                              opacity: channels[3])
         }
     }
     
@@ -261,7 +289,7 @@ extension Graphic {
                     let color = PixelColor(red: red,
                                            green: green,
                                            blue: blue,
-                                           alpha: alpha)
+                                           opacity: alpha)
                     
                     rows.append(color)
                 }
@@ -286,7 +314,7 @@ extension Graphic {
     public var channels8: [UInt8] {
         
         get async throws {
-            try await TextureMap.raw8(texture: bits(._8).texture)
+            try await TextureMap.raw8(texture: withBits(.bit8).texture)
         }
     }
     
@@ -332,7 +360,7 @@ extension Graphic: Equatable {
 @available(iOS 14.0, tvOS 14, macOS 11, *)
 extension Graphic {
     
-    public func isPixelsEqual(to graphic: Graphic) async throws -> Bool {
+    public func isPixelsEqual(to graphic: Graphic, threshold: CGFloat = 0.000_1) async throws -> Bool {
         
         guard resolution == graphic.resolution else {
             return false
@@ -342,6 +370,6 @@ extension Graphic {
         
         let color = try await difference.averagePixelColor
                 
-        return color.brightness < 0.000_1
+        return color.brightness <= threshold
     }
 }

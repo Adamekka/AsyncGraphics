@@ -26,6 +26,7 @@ extension Graphic {
         case angle
         case zoom
         case random
+        case layered
     }
     
     /// Gaussian Blur
@@ -33,7 +34,7 @@ extension Graphic {
         radius: CGFloat
     ) async throws -> Graphic {
         
-        let targetTexture: MTLTexture = try await .empty(resolution: resolution, bits: bits, usage: .write)
+        let targetTexture: MTLTexture = try .empty(resolution: resolution, bits: bits, usage: .write)
         
         guard let commandQueue = Renderer.metalDevice.makeCommandQueue() else {
             throw Renderer.RendererError.failedToMakeCommandQueue
@@ -62,6 +63,43 @@ extension Graphic {
             texture: targetTexture,
             bits: bits,
             colorSpace: colorSpace
+        )
+    }
+    
+    public func blurredLayered(
+        radius: CGFloat,
+        layerCount: Int = 10,
+        options: EffectOptions = [.edgeStretch]
+    ) async throws -> Graphic {
+        if layerCount < 1 { return self }
+        var blurredGraphic: Graphic = self
+        var radius: CGFloat = radius
+        for _ in 0..<layerCount {
+            blurredGraphic = try await blurredGraphic.blurredLayeredSinglePass(radius: radius, options: options)
+            radius /= 2.0
+        }
+        return blurredGraphic
+    }
+    
+    public func blurredLayeredSinglePass(
+        radius: CGFloat,
+        options: EffectOptions = [.edgeStretch]
+    ) async throws -> Graphic {
+        
+        let relativeRadius: CGFloat = radius / height
+        
+        return try await Renderer.render(
+            name: "Blur (Layered)",
+            shader: .name("blur"),
+            graphics: [self],
+            uniforms: BlurUniforms(
+                type: BlurType.layered.index,
+                radius: Float(relativeRadius),
+                count: 1,
+                angle: 0.0,
+                position: CGPoint.zero.uniform
+            ),
+            options: options.spatialRenderOptions
         )
     }
     

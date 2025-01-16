@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.0
 
 import CompilerPluginSupport
 import PackageDescription
@@ -7,9 +7,9 @@ let package = Package(
     name: "AsyncGraphics",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v16),
-        .tvOS(.v16),
-        .macOS(.v13),
+        .iOS(.v17),
+        .tvOS(.v17),
+        .macOS(.v14),
         .visionOS(.v1),
     ],
     products: [
@@ -20,10 +20,10 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/heestand-xyz/TextureMap", branch: "main"),
-        .package(url: "https://github.com/heestand-xyz/PixelColor", from: "2.2.2"),
-        .package(url: "https://github.com/heestand-xyz/CoreGraphicsExtensions", from: "1.8.1"),
-        .package(url: "https://github.com/heestand-xyz/SpatialExtensions", from: "0.1.3"),
-        .package(url: "https://github.com/heestand-xyz/VideoFrames", from: "1.1.1"),
+        .package(url: "https://github.com/heestand-xyz/PixelColor", from: "3.0.1"),
+        .package(url: "https://github.com/heestand-xyz/CoreGraphicsExtensions", from: "2.0.0"),
+        .package(url: "https://github.com/heestand-xyz/SpatialExtensions", from: "1.0.0"),
+        .package(url: "https://github.com/heestand-xyz/VideoFrames", from: "2.0.0"),
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.1.0"),
         .package(url: "https://github.com/apple/swift-syntax", from: "509.0.0"),
     ],

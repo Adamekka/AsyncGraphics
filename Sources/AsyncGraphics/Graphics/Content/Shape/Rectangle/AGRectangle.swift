@@ -8,6 +8,7 @@ public struct AGRectangle: AGGraph {
    
     public init() {}
     
+    @MainActor
     public func render(at proposedResolution: CGSize,
                        details: AGDetails) async throws -> Graphic {
         let resolution: CGSize = resolution(at: proposedResolution, for: details.specification)
@@ -28,6 +29,7 @@ public struct AGRectangle: AGGraph {
 
 extension AGRectangle {
     
+    @MainActor
     public func strokeBorder(lineWidth: CGFloat = 1.0) -> AGRectangle {
         var circle: AGRectangle = self
         circle.lineWidth = lineWidth * .pixelsPerPoint

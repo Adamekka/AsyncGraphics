@@ -11,6 +11,7 @@ public struct AGNoise: AGGraph {
     let colored: Bool
     let random: Bool
     
+    @MainActor
     public init(offset: CGPoint = .zero,
                 depth: CGFloat = 0.0,
                 scale: CGFloat = 1.0,
@@ -27,6 +28,7 @@ public struct AGNoise: AGGraph {
         self.random = random
     }
     
+    @MainActor
     public func render(at proposedResolution: CGSize,
                        details: AGDetails) async throws -> Graphic {
         let resolution: CGSize = resolution(at: proposedResolution, for: details.specification)

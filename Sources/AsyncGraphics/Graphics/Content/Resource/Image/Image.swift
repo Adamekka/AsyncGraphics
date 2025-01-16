@@ -39,7 +39,7 @@ extension Graphic {
         }
     }
     
-    public struct ImageOptions: OptionSet, Hashable {
+    public struct ImageOptions: OptionSet, Hashable, Sendable {
         
         public let rawValue: Int
         
@@ -76,12 +76,8 @@ extension Graphic {
         
         if options.contains(.colorCorrection) {
             
-            let linearSRGB = CGColorSpace(name: CGColorSpace.linearSRGB)!
-            if colorSpace == .sRGB, bits == ._8 {
-                graphic = try await graphic.convertColorSpace(from: .custom(linearSRGB), to: .sRGB)
-            } else if colorSpace == .displayP3, bits == ._8 {
-                /// Disabled as it's hazy on some images
-                //            graphic = try await graphic.convertColorSpace(from: .custom(linearSRGB), to: .displayP3)
+            if colorSpace == .nonLinearSRGB, bits == ._8 {
+                graphic = try await graphic.convertColorSpace(from: .linearSRGB, to: .nonLinearSRGB)
             }
             
             if colorSpace.isMonochrome {
@@ -94,7 +90,7 @@ extension Graphic {
             } else {
                 /// Fix for different texture pixel formats
                 graphic = try await graphic
-                    .brightness(1.0)
+                    .brightness(1.0) /// Has no visual effect
             }
         }
         

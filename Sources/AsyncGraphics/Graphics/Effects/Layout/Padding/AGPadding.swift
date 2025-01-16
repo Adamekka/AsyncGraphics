@@ -2,10 +2,12 @@ import CoreGraphics
 
 extension AGGraph {
     
+    @MainActor
     public func padding(_ length: CGFloat) -> any AGGraph {
         padding(.all, length)
     }
     
+    @MainActor
     public func padding(_ edgeInsets: Graphic.EdgeInsets, _ length: CGFloat = 16) -> any AGGraph {
         AGPadding(child: self, edgeInsets: edgeInsets, padding: length * .pixelsPerPoint)
     }
@@ -31,6 +33,7 @@ public struct AGPadding: AGSingleParentGraph {
                height: proposedResolution.height - verticalPadding)
     }
     
+    @MainActor
     public func resolution(at proposedResolution: CGSize,
                            for specification: AGSpecification) -> CGSize {
         let paddingResolution: CGSize = paddingResolution(at: proposedResolution)
@@ -39,6 +42,7 @@ public struct AGPadding: AGSingleParentGraph {
                       height: graphResolution.height + verticalPadding)
     }
     
+    @MainActor
     public func render(at proposedResolution: CGSize,
                        details: AGDetails) async throws -> Graphic {
         let paddingResolution: CGSize = paddingResolution(at: proposedResolution)

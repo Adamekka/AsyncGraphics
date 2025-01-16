@@ -9,16 +9,19 @@ public struct AGRoundedPolygon: AGGraph {
     let count: Int
     let cornerRadius: CGFloat
     
+    @MainActor
     public init(count: Int, cornerRadius: CGFloat) {
         self.count = count
         self.cornerRadius = cornerRadius * .pixelsPerPoint
     }
     
+    @MainActor
     public func resolution(at proposedResolution: CGSize,
                            for specification: AGSpecification) -> CGSize {
         .one.place(in: proposedResolution, placement: .fit)
     }
     
+    @MainActor
     public func render(at proposedResolution: CGSize,
                        details: AGDetails) async throws -> Graphic {
         let resolution: CGSize = resolution(at: proposedResolution, for: details.specification)

@@ -2,6 +2,7 @@ import CoreGraphics
 
 extension AGGraph {
     
+    @MainActor
     public func frame(width: CGFloat? = nil, height: CGFloat? = nil) -> any AGGraph {
         AGFrame(child: self,
                 fixedWidth: width != nil ? width! * .pixelsPerPoint : nil,
@@ -16,6 +17,7 @@ public struct AGFrame: AGSingleParentGraph {
     let fixedWidth: CGFloat?
     let fixedHeight: CGFloat?
     
+    @MainActor
     public func resolution(at proposedResolution: CGSize,
                            for specification: AGSpecification) -> CGSize {
         let proposedGraphResolution: CGSize = CGSize(width: fixedWidth ?? proposedResolution.width,
@@ -24,6 +26,7 @@ public struct AGFrame: AGSingleParentGraph {
                                 for: specification)
     }
     
+    @MainActor
     public func render(at proposedResolution: CGSize,
                        details: AGDetails) async throws -> Graphic {
         let resolution: CGSize = resolution(at: proposedResolution, for: details.specification)

@@ -9,7 +9,7 @@ import TextureMap
 
 extension Graphic {
     
-    public enum MapType {
+    public enum MapType: Sendable {
         case standard
         case mutedStandard
         case satellite
@@ -34,7 +34,7 @@ extension Graphic {
         }
     }
     
-    public struct MapOptions: OptionSet {
+    public struct MapOptions: OptionSet, Sendable {
         
         public let rawValue: Int
         

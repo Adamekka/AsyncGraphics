@@ -2,6 +2,7 @@ import CoreGraphics
 
 extension AGGraph {
     
+    @MainActor
     public func blur(radius: CGFloat) -> any AGGraph {
         AGBlur(child: self, radius: radius * .pixelsPerPoint)
     }
@@ -13,6 +14,7 @@ public struct AGBlur: AGSingleParentGraph {
     
     let radius: CGFloat
     
+    @MainActor
     public func render(at proposedResolution: CGSize,
                        details: AGDetails) async throws -> Graphic {
         let resolution: CGSize = resolution(at: proposedResolution, for: details.specification)

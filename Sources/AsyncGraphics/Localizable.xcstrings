@@ -981,6 +981,9 @@
         }
       }
     },
+    "option.blurType.layered" : {
+
+    },
     "option.blurType.random" : {
       "localizations" : {
         "en" : {
@@ -1430,6 +1433,9 @@
           }
         }
       }
+    },
+    "option.lumaBlurType.layered" : {
+
     },
     "option.lumaBlurType.random" : {
       "localizations" : {
@@ -2400,6 +2406,9 @@
           }
         }
       }
+    },
+    "property.layerCount" : {
+
     },
     "property.leadingPoint" : {
       "localizations" : {

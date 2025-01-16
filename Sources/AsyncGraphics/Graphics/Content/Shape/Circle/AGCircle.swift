@@ -8,11 +8,13 @@ public struct AGCircle: AGGraph {
     
     public init() { }
     
+    @MainActor
     public func resolution(at proposedResolution: CGSize,
                            for specification: AGSpecification) -> CGSize {
         .one.place(in: proposedResolution, placement: .fit)
     }
     
+    @MainActor
     public func render(at proposedResolution: CGSize,
                        details: AGDetails) async throws -> Graphic {
         let resolution: CGSize = resolution(at: proposedResolution, for: details.specification)
@@ -34,6 +36,7 @@ public struct AGCircle: AGGraph {
 
 extension AGCircle {
     
+    @MainActor
     public func strokeBorder(lineWidth: CGFloat = 1.0) -> AGCircle {
         var circle: AGCircle = self
         circle.lineWidth = lineWidth * .pixelsPerPoint
