@@ -11,8 +11,8 @@ extension Graphic {
         let green: ColorUniform
         let blue: ColorUniform
         let alpha: ColorUniform
-        let white: ColorUniform
-        let mono: ColorUniform
+        let isOne: ColorUniform
+        let isLuma: ColorUniform
     }
     
     @EnumMacro
@@ -22,10 +22,20 @@ extension Graphic {
         case green
         case blue
         case alpha
+        case zero
+        case one
+        case luminance
+        @available(*, deprecated, renamed: "zero")
         case clear
+        @available(*, deprecated, renamed: "one")
         case white
+        @available(*, deprecated, renamed: "luminance")
         case mono
         
+        public static var allCases: [Graphic.ColorChannel] {
+            [.red, .green, .blue, .alpha, .zero, .one, .luminance]
+        }
+            
         public var color: PixelColor {
             switch self {
             case .red:
@@ -59,17 +69,17 @@ extension Graphic {
                 green: green.color.uniform,
                 blue: blue.color.uniform,
                 alpha: alpha.color.uniform,
-                white: ColorUniform(
-                    red: red == .white ? 1.0 : 0.0,
-                    green: green == .white ? 1.0 : 0.0,
-                    blue: blue == .white ? 1.0 : 0.0,
-                    alpha: alpha == .white ? 1.0 : 0.0
+                isOne: ColorUniform(
+                    red: red == .one ? 1.0 : 0.0,
+                    green: green == .one ? 1.0 : 0.0,
+                    blue: blue == .one ? 1.0 : 0.0,
+                    alpha: alpha == .one ? 1.0 : 0.0
                 ),
-                mono: ColorUniform(
-                    red: red == .mono ? 1.0 : 0.0,
-                    green: green == .mono ? 1.0 : 0.0,
-                    blue: blue == .mono ? 1.0 : 0.0,
-                    alpha: alpha == .mono ? 1.0 : 0.0
+                isLuma: ColorUniform(
+                    red: red == .luminance ? 1.0 : 0.0,
+                    green: green == .luminance ? 1.0 : 0.0,
+                    blue: blue == .luminance ? 1.0 : 0.0,
+                    alpha: alpha == .luminance ? 1.0 : 0.0
                 )
             ),
             options: options.colorRenderOptions
@@ -80,7 +90,7 @@ extension Graphic {
 extension Graphic {
     
     public func alphaToLuminance() async throws -> Graphic {
-        try await channelMix(red: .alpha, green: .alpha, blue: .alpha, alpha: .white)
+        try await channelMix(red: .alpha, green: .alpha, blue: .alpha, alpha: .one)
     }
     
     public func alphaToLuminanceWithAlpha() async throws -> Graphic {
@@ -88,10 +98,10 @@ extension Graphic {
     }
     
     public func luminanceToAlpha() async throws -> Graphic {
-        try await monochrome().channelMix(red: .mono, green: .mono, blue: .mono, alpha: .mono)
+        try await monochrome().channelMix(red: .luminance, green: .luminance, blue: .luminance, alpha: .luminance)
     }
     
     public func luminanceToAlphaWithColor() async throws -> Graphic {
-        try await channelMix(red: .red, green: .green, blue: .blue, alpha: .mono)
+        try await channelMix(red: .red, green: .green, blue: .blue, alpha: .luminance)
     }
 }
