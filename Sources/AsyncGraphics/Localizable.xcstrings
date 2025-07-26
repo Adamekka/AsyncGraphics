@@ -151,6 +151,16 @@
         }
       }
     },
+    "graphic.effect.color.bayerDither" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bayer Dither"
+          }
+        }
+      }
+    },
     "graphic.effect.color.channelMix" : {
       "localizations" : {
         "en" : {
@@ -2571,6 +2581,16 @@
         }
       }
     },
+    "property.keepResolution" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep Resolution"
+          }
+        }
+      }
+    },
     "property.layerCount" : {
       "localizations" : {
         "en" : {
@@ -2607,6 +2627,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Length"
+          }
+        }
+      }
+    },
+    "property.levels" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Levels"
           }
         }
       }
@@ -2667,6 +2697,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mirror"
+          }
+        }
+      }
+    },
+    "property.monochrome" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monochrome"
           }
         }
       }
@@ -2957,6 +2997,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Softness"
+          }
+        }
+      }
+    },
+    "property.strength" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strength"
           }
         }
       }
